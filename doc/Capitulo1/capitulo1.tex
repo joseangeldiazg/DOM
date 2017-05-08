@@ -1,0 +1,164 @@
+%---------------------------------------------------
+% Nombre: capitulo1.tex  
+% 
+% Texto del capitulo 1
+%---------------------------------------------------
+
+\chapter{Domótica}
+
+En esta memoria podremos encontrar el desarrollo del trabajo realizado a lo largo de la asignatura Domótica del Máster Profesional en Ingeniería Informática de la UGR. En el capítulo \ref{edificio}  explicaremos los primeros pasos para crear un proyecto así como también, haremos un estudio de la topología del edificio en el que simularemos el proyecto de domotización, para continuar con la explicación del proceso de domotización de la iluminación por regulación \ref{luz}, el control de presencia para iluminación en la noche \ref{presencia}, control de temperatura \ref{temperatura}, el control de persianas \ref{persianas} y por último la programación de un panel táctil para el control \ref{panel}.  
+
+
+
+\section{Creación del proyecto}
+\label{edificio}
+
+Una vez instalado el programa el primer paso es  bajarnos los catálogos de los dispositivos del equipo de prácticas. Tras esto, podremos crear un nuevo proyecto. 
+
+\subsection{Proyecto}
+
+En el nuevo proyecto damos un nombre a nuestra instalación domótica y dejamos los demás ajustes como vienen es decir:
+
+\begin{itemize}
+	\item Nombre de nuestro proyecto: Domotizar Piso.
+	\item Backbone: IP.
+	\item Topología: Linea 1.1 Par Trenzado (TP).
+	\item Estilo de direcciones de grupo: 3 niveles (libre puede dar problemas).
+\end{itemize}
+
+\subsection{Topología del edificio}
+
+Tendremos que crear una \textit{estructura de edificio} que se asimile a la realidad del edificio a domotizar para favorecer la conceptualización del mismo. Los distintos dispositivos que añadiremos deberán ir dentro de la estructura realizada correspondiendo esta con el espacio físico en el que realmente estarán. 
+
+Para la práctica se ha creado el árbol de estancias que podemos ver en la figura \ref{img_estancias}.
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[scale=0.5]{./Capitulo1/Imagenes/estancias.png}
+		\caption{Estancias del proyecto.}
+	\label{img_estancias}
+\end{figure}
+
+Podemos ver un Edificio, compuesto de una sola planta que a su vez se compone de tres Estancias, un pasillo y un Cuadro para ubicar dispositivos dentro de la Estancia denominada como Salon. 
+
+\section{Iluminación}
+\label{luz}
+
+Para este primer hito de la práctica nos hemos basado en las directrices que se nos da en el primer guión de practicas de KNX \cite{knx} de la asignatura. Programaremos por tanto la iluminación del salón, donde tendremos una lampara general del techno la cual podremos encender o apagar normalmente y otra línea de iluminación que regularemos para por ejemplo una lampara de pie que nos interese en ciertos momentos tener con menos iluminación para ver una película por ejemplo. Estos controles se llevarán a cabo desde el panel \textbf{Touch-MyDesing}.
+
+Añadimos por tanto al cuadro de control del salón los dispositivos relacionados. El  \textbf{Touch-MyDesing} para el control y \textbf{DMinBox} para controlar los canales de iluminación. Desde el panel de dispositivos, tendremos que configuarlos como sigue:
+
+	\begin{itemize}
+		\item DMinBox: Configuraremos dos canales independientes C1 y C2 y tipo de carga LED. 
+		\item Touch-MyDesing: Pulsador A1, como enviar 0 para apagar la luz general. Pulsador A2 como enviar 1 para encencer la luz principal, y por ultimo configuramos la pareja B como control de regulación. 
+	\end{itemize}
+
+Una vez hecho esto crearemos por tanto una direccion de grupo principal para la iluminación, otro medio para el control del salón y por último dos direcciones de grupo, una para el control de la luz general y otra para la regulación. El resultado podemos verlo en la figura \ref{dirs}.
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[scale=0.5]{./Capitulo1/Imagenes/dir.png}
+		\caption{Direcciones de grupo.}
+	\label{dirs}
+\end{figure}
+
+
+Tras esto, deberemos añadir la dirección de grupo de control general el enlace con el canal 1 correspondiente y los pulsadores de encendido y apagado (figura \ref{iluminacion_general}), mientras que en el grupo de la regulación deberemos añadir un control de regulación y la pareja B (figura \ref{iluminacion_regulacion}). Debemos tener cuidado que el tipo de datos dentro de una misma dirección de grupo sea el mismo, sino tendremos errores al programar. Tras esto, solo tendremos que programar nuestro sistema KNX.
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[scale=0.5]{./Capitulo1/Imagenes/general.png}
+		\caption{Configuración iluminación general.}
+	\label{iluminacion_general}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[scale=0.5]{./Capitulo1/Imagenes/regulacion.png}
+		\caption{Configuración iluminación por regulación.}
+	\label{iluminacion_regulacion}
+\end{figure}
+
+En este punto hemos elaborado por tanto la domotización de la luz general del salón de nuestro piso y de la regulación de una pequeña lampara de pie por ejemplo para una escena de cine que nos interese regular, pero esto no tiene mucha función domótica ya que aunque ofrece cierto confort el controlar todo desde un panel no es autónomo por lo que vamos a crear otro canal de luz autónomo, que será lo que veremos en el punto \ref{presencia}.
+
+\section{Control de presencia}
+\label{presencia}
+ 
+En este punto vamos a programar las luces led que por ejemplo están en el pasillo de nuestro piso, para que en caso de despertarnos por la noche y estas nos detecten se enciendan. El funcionamiento de nuestro sistema de iluminación por detección de movimiento será por tanto el siguiente:
+
+\begin{itemize}
+	\item Si la iluminación de la estancia sobrepasa el 50\% el detector de presencia no tendrá funcionamiento alguno. 
+	\item Si la luz es inferior al 50\% y se detecta movimiento se encenderá la misma. 
+	\item Si no se detecta movimiento no se encenderá. 
+\end{itemize}
+
+Para ello, crearemos una nueva direccion de grupo dentro de nuestro control de iluminación, y habilitaremos las entradas de nuestro \textbf{DMinBox} para obtener cuando este tiene movimiento. En la configuración de esta entrada dejaremos la duración de la detección en 2s para que sea rápido y limitaremos la detección por luminosidad para evitar que de día este funcione. 
+
+Como queremos que las lámparas configuradas en el punto \ref{luz} sigan funcionando al añadir esta nueva funcionalidad, tenemos que añadir un nuevo dispositivo en \textbf{MINIBox45} sobre el que configuramos un canal de encendido y apagado binario. Para poder mandar la detección de luz en el bus de KNX, tendremos que añadir un nuevo \textbf{objeto de comunicación} correspondiente a la detección de luz. También deberemos desactivar la opción de \textbf{enviar no detección al sobrepasar el umbral} para evitar que afecte la propia luz que estamos controlando al dispositivo de detección. 
+
+El resultado final podemos verlo en la figura \ref{deteccion}. Una vez programado, este dispositivo funcionará correctamente y podremos pasar al control de temperatura que veremos en el punto \ref{temperatura}.
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[scale=0.5]{./Capitulo1/Imagenes/deteccion.png}
+		\caption{Configuración iluminación por deteccion.}
+	\label{deteccion}
+\end{figure}
+
+\section{Control de temperatura}
+\label{temperatura}
+
+\section{Control de persianas}
+\label{persianas}
+
+En este punto simularemos el control de persianas del salon de nuestro piso a domotizar, para ello usaremos el panel \textbf{touchMyDesign} para el control de las persianas y los relés de nuestro \textbf{MINIBox45} para activar los motores que controlarían las persianas. El primer paso para ello y para seguir con el símil que hemos realizado en el proyecto de domotización, crearemos las direcciones de grupo que podemos ver en la figura \ref{persianas}.
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[scale=0.5]{./Capitulo1/Imagenes/persianas.png}
+		\caption{Direcciones de grupo para las persianas.}
+	\label{persianas}
+\end{figure}
+
+\subsection{Configuración touchMyDesign}
+
+Hemos creado dos direcciones de grupo, una para permitir subir y bajar y otra para detener la subida o la bajada de las persianas según corresponda. Para implementar esta funcionalidad deberemos activar en el panel \textbf{touchMyDesign} el canal C1, en función de persianas, es importante que el tipo sea \textbf{estándar}. El primer pulsador lo asignaremos a subir, y el segundo a bajar. 
+
+\subsection{Configuración MINIBox45}
+
+Tras esto, debemos configurar el  \textbf{MINIBox45}, para ello habilitaremos el canal A y le asignaremos canal de persianas, tras ello, el canal se habilitará y nos aparecerá el tiempo de retardo de subida y bajada. Una configuración buena puede ser la que vemos en la figura \ref{tiempo}, donde asignamos 15 segundos de subida, 15 de bajada y 1 de cambio. 
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[scale=0.4]{./Capitulo1/Imagenes/tiempo.png}
+		\caption{Retardos para las persianas.}
+	\label{tiempo}
+\end{figure}
+
+\subsection{Objetos de comunicación}
+
+Por ultimo debemos de asignar los objetos de comunicación a las direcciones de grupo. La dirección de grupo de \textbf{Mover}, controlará la subida o bajada de las persianas, para ello debemos configurarla como vemos en la imagen \ref{mover}. Así, cuando demos a subir estas subirán o cuando le demos a bajar bajaran. 
+
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[scale=0.5]{./Capitulo1/Imagenes/mover.png}
+		\caption{Mover persianas.}
+	\label{mover}
+\end{figure}
+
+Para que podamos detener las persianas cuando queramos, la dirección de grupo parar tendrá la siguiente configuración que por medio de una pulsación corta siempre que las persianas estén subiendo o bajando harán que paren de moverse. 
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[scale=0.5]{./Capitulo1/Imagenes/parar.png}
+		\caption{Parar persianas.}
+	\label{parar}
+\end{figure}
+
+
+\section{Panel táctil}
+\label{panel}
+
+\clearpage
+%---------------------------------------------------

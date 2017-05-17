@@ -8,8 +8,6 @@
 
 En esta memoria podremos encontrar el desarrollo del trabajo realizado a lo largo de la asignatura Domótica del Máster Profesional en Ingeniería Informática de la UGR. En el capítulo \ref{edificio}  explicaremos los primeros pasos para crear un proyecto así como también, haremos un estudio de la topología del edificio en el que simularemos el proyecto de domotización, para continuar con la explicación del proceso de domotización de la iluminación por regulación \ref{luz}, el control de presencia para iluminación en la noche \ref{presencia}, control de temperatura \ref{temperatura}, el control de persianas \ref{persianas} y por último la programación de un panel táctil para el control \ref{panel}.  
 
-
-
 \section{Creación del proyecto}
 \label{edificio}
 
@@ -44,7 +42,7 @@ Podemos ver un Edificio, compuesto de una sola planta que a su vez se compone de
 \section{Iluminación}
 \label{luz}
 
-Para este primer hito de la práctica nos hemos basado en las directrices que se nos da en el primer guión de practicas de KNX \cite{knx} de la asignatura. Programaremos por tanto la iluminación del salón, donde tendremos una lampara general del techno la cual podremos encender o apagar normalmente y otra línea de iluminación que regularemos para por ejemplo una lampara de pie que nos interese en ciertos momentos tener con menos iluminación para ver una película por ejemplo. Estos controles se llevarán a cabo desde el panel \textbf{Touch-MyDesing}.
+Para este primer hito de la práctica nos hemos basado en las directrices que se nos da en el primer guión de prácticas de KNX \cite{knx} de la asignatura. Programaremos por tanto la iluminación del salón, donde tendremos una lampara general del techno la cual podremos encender o apagar normalmente y otra línea de iluminación que regularemos para por ejemplo una lampara de pie que nos interese en ciertos momentos tener con menos iluminación para ver una película por ejemplo. Estos controles se llevarán a cabo desde el panel \textbf{Touch-MyDesing}.
 
 Añadimos por tanto al cuadro de control del salón los dispositivos relacionados. El  \textbf{Touch-MyDesing} para el control y \textbf{DMinBox} para controlar los canales de iluminación. Desde el panel de dispositivos, tendremos que configuarlos como sigue:
 
@@ -108,6 +106,8 @@ El resultado final podemos verlo en la figura \ref{deteccion}. Una vez programad
 \section{Control de temperatura}
 \label{temperatura}
 
+Siguiendo con el paralelismo visto a lo largo del supuesto práctico de domotización de un piso, el punto de control de temperatura se estudiará en el punto \ref{panel} en conjunción con el panel táctil \textbf{inZenio Z41} ya que de esta manera el control de temperatura se asimilará más a la realidad del que podríamos tener el el hipotético piso, pudiendo controlar este desde nuestro smartphone. 
+
 \section{Control de persianas}
 \label{persianas}
 
@@ -137,7 +137,7 @@ Tras esto, debemos configurar el  \textbf{MINIBox45}, para ello habilitaremos el
 
 \subsection{Objetos de comunicación}
 
-Por ultimo debemos de asignar los objetos de comunicación a las direcciones de grupo. La dirección de grupo de \textbf{Mover}, controlará la subida o bajada de las persianas, para ello debemos configurarla como vemos en la imagen \ref{mover}. Así, cuando demos a subir estas subirán o cuando le demos a bajar bajaran. 
+Por último debemos de asignar los objetos de comunicación a las direcciones de grupo. La dirección de grupo de \textbf{Mover}, controlará la subida o bajada de las persianas, para ello debemos configurarla como vemos en la imagen \ref{mover}. Así, cuando demos a subir estas subirán o cuando le demos a bajar bajaran. 
 
 
 \begin{figure}[H]
@@ -160,5 +160,23 @@ Para que podamos detener las persianas cuando queramos, la dirección de grupo pa
 \section{Panel táctil}
 \label{panel}
 
+En este punto simularemos el control de temperatura de nuestro piso domótico. Para ello, usaremos los siguientes elementos:
+
+\begin{itemize}
+\item \textbf{Panel táctil inZenio Z41}: Donde podremos establecer una temperatura de consiga y controlarla desde nuestro smartphone.
+\item \textbf{Luminaria}: Usaremos una de las lámparas incluidas en el sistema para simular la calefacción de nuestro piso. 
+\item \textbf{Smartphone}: Mediante la aplicación \item \textbf{Z41 Remote} emparejaremos nuestro móvil con la pantalla para poder controlarlo remotamente. 
+\end{itemize}
+
+\section{Resumen del proceso}
+\label{final}
+
+
+\section{Conclusiones}
+
+A lo largo de la realización de las prácticas de la asignatura domótica hemos podido constatar la potencia del estándar KNX para procesos domóticos, pese a no haber podido exprimir al máximo su potencia dadas las limitaciones del laboratorio de prácticas donde solo hemos contado con algunos dispositivos. Pese a estas limitaciones, tal y como hemos visto en el punto \ref{final} hemos podido crear un proyecto en \textbf{ETS5}, donde se ha llevado una domotización bastante completa de algunos de los dispositivos básicos de una vivienda. 
+
+Por otro lado, también hemos podido comprobar que pese a la potencia de \textbf{KNX}, esta no sería la opción que elegiríamos de cara a domotizar nuestra vivienda dado que son equipos muy caros y que pueden suplirse con otros de más fácil configuración e instalación.
+ 
 \clearpage
 %---------------------------------------------------

@@ -164,9 +164,52 @@ En este punto simularemos el control de temperatura de nuestro piso domótico. Pa
 
 \begin{itemize}
 \item \textbf{Panel táctil inZenio Z41} \cite{z41}: Donde podremos establecer una temperatura de consiga y controlarla desde nuestro smartphone.
-\item \textbf{Luminaria}: Usaremos una de las lámparas incluidas en el sistema para simular la calefacción de nuestro piso. 
+\item \textbf{Luminaria}: Usaremos una de las lámparas incluidas en el sistema para simular la calefacción de nuestro piso, esta la abriremos o cerraremos con una de las salidas del MINIMBOX. 
+\item \textbf{Sonda de temperatura}: Usaremos la sonda de temperatura externa conectada al DIMINBOX para obtener la temperatura exterior. 
 \item \textbf{Smartphone}: Mediante la aplicación \item \textbf{Z41 Remote} emparejaremos nuestro móvil con la pantalla para poder controlarlo remotamente. 
 \end{itemize}
+
+Dados los problemas que hemos tenido con la pantalla, no ha podido probarse la programación del sistema, pero aún así, se ha llevado a cabo el proceso que debería llevarse a cabo en el programa ETS5.
+
+\subsection{Direcciones de grupo}
+
+Se han creado tres direcciones de grupo, una para obtener mediante la sonda externa la temperatura ambiente, otra que muestra la temperatura de consiga y otra que controla la salida del termostato. 
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[scale=0.5]{./Capitulo1/Imagenes/calefaccion.png}
+		\caption{Direcciones de grupo para la calefacción.}
+	\label{cale}
+\end{figure}
+
+La configuración de los dispositivos deberemos de habilitar la entrada de la sonda de temperatura en el DIMINBOX y las salidas para termostato en el MINIMBOX. Una vez habilitadas estas opciones, podremos configurar los datos relativos a la temperatura, como por ejemplo la temperatura de consiga, o la sensibilidad.
+
+\subsection{Objetos de comunicación} 
+
+Los objetos de comunicación usados podemos verlos en la siguientes imágenes:
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[scale=0.5]{./Capitulo1/Imagenes/consigna.png}
+		\caption{Objetos de comunicación para la consigna.}
+	\label{consigna}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[scale=0.5]{./Capitulo1/Imagenes/termostato.png}
+		\caption{Objetos de comunicación para el termostato.}
+	\label{termostato}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[scale=0.5]{./Capitulo1/Imagenes/ambiente.png}
+		\caption{Objetos de comunicación para la sonda externa.}
+	\label{ambiente}
+\end{figure}
+
+
 
 \section{Resumen del proceso}
 \label{final}
